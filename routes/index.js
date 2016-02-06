@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 router.get('/result', function(req, res, next) {
 	var query = req.query.search;
 	var queryLength = query.length;
-	var resultLength;
+	var resultLength = 0;
 
 	file.loadBooks(sevenPotters).then(function(booksWithText) {
 		sevenPotters.books = booksWithText;
@@ -25,10 +25,20 @@ router.get('/result', function(req, res, next) {
 	}).then(function(data) {
 		return search.searchAllBooks(data, query);
 	}).then(function(indices) {
-		return getContext.getAllContexts(sevenPotters, indices, query);
+		indices.forEach(function(wand) {
+			resultLength += wand.indices.length;
+		});
+
+		console.log('numresults: ', resultLength);
+
+		if(resultLength > 0) {
+			return getContext.getAllContexts(sevenPotters, indices, query);
+		} else {
+			return { noResults: true };
+		}
 	}).then(function(outputObject) {
 		outputObject.query = query;
-		// outputObject.numResults = resultLength;
+		outputObject.numResults = resultLength;
 		res.render('result', outputObject);
 	});
 });

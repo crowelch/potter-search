@@ -1,5 +1,6 @@
 var fs = require('fs');
-var pasync = require('pasync');
+var async = require('async');
+var _ = require('lodash');
 
 exports.loadFile = function(book) {
 	// console.log('filename', book.filename);
@@ -16,17 +17,27 @@ exports.loadFile = function(book) {
 	});
 }
 
-exports.loadBooks = function(data) {
-	var newBooks = {
-		books:[]
-	};
-
+exports.loadBooks = function(potters) {
 	return new Promise(function(resolve, reject) {
-		pasync.each(data.books, loadFile).then(function(book) {
-			console.log(book);
-			books.push(book);
-		}).then(function() {
+		var books = [];
 
+		async.each(potters.books, function(book, cb) {
+			fs.readFile(book.filename, 'utf-8', (err, data) => {
+				if(err) {
+					console.log(err);
+				} else {
+					book.text = data;
+					books.push(book);
+				}
+
+				cb();
+			});
+		}, function(err) {
+			if(err) {
+				console.log(err);
+			} else {
+				resolve(books);
+			}
 		});
 	});
 }

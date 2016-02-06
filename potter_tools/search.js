@@ -1,4 +1,7 @@
-exports.search = function(textToSearch, textToFind) {
+var async = require('async');
+var _ = require('lodash');
+
+function search(textToSearch, textToFind, cb) {
 	var indicesFound = [];
 	var position = 0;
 
@@ -13,5 +16,28 @@ exports.search = function(textToSearch, textToFind) {
 	// Last element appears to always be -1, so remove it. Hack, I know.
 	indicesFound.pop();
 
-	return Promise.resolve(indicesFound);
+	cb(indicesFound);
+}
+
+exports.searchAllBooks = function(books, query) {
+	var results = [];
+
+	return new Promise(function(resolve, reject) {
+		async.each(books, function(book, cb) {
+			search(book.text, query, function(indices) {
+				results.push({
+					indices: indices,
+					book: book.bookNumber
+				});
+
+				cb();
+			});
+		}, function(err) {
+			if(err) {
+				console.log(err);
+			} else {
+				resolve(results);
+			}
+		});
+	});
 }

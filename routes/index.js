@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var url = require('url');
 var file = require('../potter_tools/fileUtils');
-var search = require('../potter_tools/search').search;
-var getContext = require('../potter_tools/getContext').getContext;
+var search = require('../potter_tools/search');
+var getContext = require('../potter_tools/getContext');
 
 /* GET home page. */
 
@@ -13,38 +13,53 @@ router.get('/', function(req, res, next) {
 	});
 });
 
+//all the books
 router.get('/result', function(req, res, next) {
 	var query = req.query.search;
 	var queryLength = query.length;
-	var booksWithText;
+	var resultLength;
 
-	console.log('query', query);
-	console.log('length', queryLength);
-
-	// console.log('wat', sevenPotters.books[0]);
-
-	file.loadFile(sevenPotters.books[0]).then(function(data) {
-		// sevenPotters = data;
-		booksWithText = data;
-		return data;
+	file.loadBooks(sevenPotters).then(function(booksWithText) {
+		sevenPotters.books = booksWithText;
+		return booksWithText;
 	}).then(function(data) {
-		return search(data.text, query);
+		return search.searchAllBooks(data, query);
 	}).then(function(indices) {
-		if(indices.length > 0) {
-			return getContext(sevenPotters.books[0].text, indices, query);
-		} else {
-			console.log('no results');
-			return {
-				error: 'No results found'
-			}
-		}
-		// res.send(sevenPotters.books[0].text.substr(indices[0], queryLength));
-		// res.send(indices);
-	}).then(function(contextWords) {
-		console.dir(contextWords);
-		res.render('result', contextWords);
+		return getContext.getAllContexts(sevenPotters, indices, query);
+	}).then(function(outputObject) {
+		outputObject.query = query;
+		// outputObject.numResults = resultLength;
+		res.render('result', outputObject);
 	});
 });
+
+//one book
+// router.get('/result', function(req, res, next) {
+// 	var query = req.query.search;
+// 	var queryLength = query.length;
+// 	var booksWithText;
+// 	var resultLength;
+
+// 	file.loadFile(sevenPotters.books[0]).then(function(data) {
+// 		return data;
+// 	}).then(function(data) {
+// 		return search(data.text, query);
+// 	}).then(function(indices) {
+// 		resultLength = indices.length;
+// 		if(indices.length > 0) {
+// 			return getContext(sevenPotters.books[0].text, indices, query);
+// 		} else {
+// 			console.log('no results');
+// 			return {
+// 				error: 'No results found'
+// 			}
+// 		}
+// 	}).then(function(contextWords) {
+// 		contextWords.query = query;
+// 		contextWords.numResults = resultLength;
+// 		res.render('result', contextWords);
+// 	});
+// });
 
 module.exports = router;
 
@@ -67,7 +82,7 @@ var sevenPotters = {
 		bookNumber: 4
 	}, {
 		title: 'Harry Potter and the Order of the Phoenix',
-		filename: __dirname + '/../txt/hp_order_of_phoenix.txt',
+		filename: __dirname + '/../txt/hp_order_of_the_phoenix.txt',
 		bookNumber: 5
 	}, {
 		title: 'Harry Potter and the Half Blood Prince',

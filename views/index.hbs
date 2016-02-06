@@ -1,2 +1,6 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<h1 class="text-center">{{title}}</h1>
+<form action="/result" method="GET">
+	<input class="text-center form-control" name="search" type="text" autofocus="true" placeholder="Dumbledore"></input>
+	<input class="btn btn-default center-block" type="submit" value="Submit">
+</form>
+{{!-- <button class="btn btn-default center-block" type="submit">Search</button> --}}

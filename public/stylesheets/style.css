@@ -3,10 +3,12 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
-}
-
 ul {
 	list-style-type: none;
+}
+
+a {
+	text-decoration: none;
+	color: #2e2e2e;
+
 }

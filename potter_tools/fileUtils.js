@@ -3,7 +3,6 @@ var async = require('async');
 var _ = require('lodash');
 
 exports.loadFile = function(book) {
-	// console.log('filename', book.filename);
 	return new Promise(function(resolve, reject) {
 		fs.readFile(book.filename, 'utf-8', (err, data) => {
 			if(err) {

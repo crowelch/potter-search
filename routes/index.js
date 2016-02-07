@@ -29,8 +29,6 @@ router.get('/result', function(req, res, next) {
 			resultLength += wand.indices.length;
 		});
 
-		console.log('numresults: ', resultLength);
-
 		if(resultLength > 0) {
 			return getContext.getAllContexts(sevenPotters, indices, query);
 		} else {
@@ -42,34 +40,6 @@ router.get('/result', function(req, res, next) {
 		res.render('result', outputObject);
 	});
 });
-
-//one book
-// router.get('/result', function(req, res, next) {
-// 	var query = req.query.search;
-// 	var queryLength = query.length;
-// 	var booksWithText;
-// 	var resultLength;
-
-// 	file.loadFile(sevenPotters.books[0]).then(function(data) {
-// 		return data;
-// 	}).then(function(data) {
-// 		return search(data.text, query);
-// 	}).then(function(indices) {
-// 		resultLength = indices.length;
-// 		if(indices.length > 0) {
-// 			return getContext(sevenPotters.books[0].text, indices, query);
-// 		} else {
-// 			console.log('no results');
-// 			return {
-// 				error: 'No results found'
-// 			}
-// 		}
-// 	}).then(function(contextWords) {
-// 		contextWords.query = query;
-// 		contextWords.numResults = resultLength;
-// 		res.render('result', contextWords);
-// 	});
-// });
 
 module.exports = router;
 

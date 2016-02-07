@@ -11,8 +11,6 @@ exports.getContext = function(sourceText, indices, query) {
 
 	return new Promise(function(resolve, reject) {
 		_.forEach(indices, function(value, key) {
-			console.log(value, key);
-
 			var result = {};
 
 			if(value - CONTEXT < 0) {
@@ -21,7 +19,7 @@ exports.getContext = function(sourceText, indices, query) {
 				result.preText = removeHalfWordStart(sourceText.substr(value - CONTEXT, CONTEXT));
 			}
 			result.postText = removeHalfWordEnd(sourceText.substr(value + query.length, CONTEXT));
-			result.text = '<strong>' + query + '</strong>';
+			result.text = '<b>' + query + '</b>';
 
 			contextObj.results.push(result);
 		});
@@ -37,16 +35,10 @@ exports.getAllContexts = function(sources, indices, query) {
 
 	return new Promise(function(resolve, reject) {
 		_.forEach(indices, function(outerIndex, place) {
-			console.log(outerIndex);
 			_.forEach(sources.books, function(v, k) {
-				console.log(v.bookNumber, outerIndex.book);
 				if(v.bookNumber === outerIndex.book) {
 					_.forEach(outerIndex.indices, function(value, key) {
-						console.log(value, key);
-
 						var result = {};
-
-						// console.log(v.text);
 
 						if(value - CONTEXT < 0) {
 							result.preText = removeHalfWordStart(v.text.substr(0, value));
@@ -54,7 +46,7 @@ exports.getAllContexts = function(sources, indices, query) {
 							result.preText = removeHalfWordStart(v.text.substr(value - CONTEXT, CONTEXT));
 						}
 						result.postText = removeHalfWordEnd(v.text.substr(value + query.length, CONTEXT));
-						result.text = '<strong>' + query + '</strong>';
+						result.text = '<b>' + query + '</b>';
 						result.book = v.title;
 
 						contextObj.results.push(result);

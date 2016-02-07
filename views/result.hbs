@@ -7,20 +7,22 @@
 	<br>
 	<ul>
 		{{#each results}}
-			<li>
-				<ul>
-					<li>
-						<p>
-							{{preText}}
-							{{{text}}}
-							{{postText}}
-						</p>
-					</li>
-					<li>
-						Book: {{book}}
-					</li>
-				</ul>
-			</li>
+			<div class="container">
+				<li>
+					<div class="panel panel-default">
+						<div class="panel-body">
+								<p>
+									{{preText}}
+									{{{text}}}
+									{{postText}}
+								</p>
+						</div>
+						<div class="panel-footer">
+							<em>{{book}}</em>
+						</div>
+					</div>
+				</li>
+			</div>
 			<br>
 			<br>
 		{{/each}}

@@ -55,7 +55,7 @@ exports.getAllContexts = function(sources, indices, query) {
 						}
 						result.postText = removeHalfWordEnd(v.text.substr(value + query.length, CONTEXT));
 						result.text = '<strong>' + query + '</strong>';
-						result.book = outerIndex.book;
+						result.book = v.title;
 
 						contextObj.results.push(result);
 					});

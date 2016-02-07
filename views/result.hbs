@@ -1,3 +1,13 @@
+<form action="/result" method="GET">
+	<div class="input-group pull-right"  style="max-width:180px">
+    	<input type="text" name="search" class="form-control" placeholder="Search again" action="/result" method="GET">
+    	<span class="input-group-btn">
+     		<input class="btn btn-default" type="submit" value="Go">
+    	</span>
+	</div>
+</form>
+<br>
+<br>
 {{#if noResults}}
 	<h2 class="text-center">No Results Found</h2>
 {{else}}
